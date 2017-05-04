@@ -6,7 +6,9 @@ package it.polito.tdp.borders;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.*;
 
+import it.polito.tdp.borders.model.Country;
 import it.polito.tdp.borders.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +19,8 @@ public class BordersController {
 
 	Model model;
 
+	Map<Country,Integer> mappa = new HashMap<Country, Integer> () ;
+	
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
 
@@ -31,10 +35,18 @@ public class BordersController {
 
 	@FXML
 	void doCalcolaConfini(ActionEvent event) {
-
-		txtResult.setText("Todo!");
+		String anno = txtAnno.getText() ;
+		model.creaGrafo(anno) ;
+		mappa = model.getCountries2() ;
+		for (Country country : mappa.keySet())
+			txtResult.appendText(country+" stati confinanti "+ mappa.get(country)+"\n \n");		
+		txtResult.appendText(model.getNumberOfConnectedComponents().toString());
+//				c.getName()+": paesi confinanti " + c.getNConfinanti()+"\n");
 	}
 
+	public void setModel(Model m){
+		this.model = m ;
+	}
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
 		assert txtAnno != null : "fx:id=\"txtAnno\" was not injected: check your FXML file 'Borders.fxml'.";
